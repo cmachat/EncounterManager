@@ -1,0 +1,34 @@
+Monster					Character
+
+pk_monster				pk_character
+name,					name		
+alignment				alignment
+armor_class				armor_class
+hitpoints_average,		hitpoints
+movement,				movement
+stat_str,				stat_str,	
+stat_dex,				stat_dex,
+stat_con,				stat_con,
+stat_int,				stat_int,
+stat_wis,				stat_wis,
+stat_cha,				stat_cha,
+
+
+
+Monster
+
+type
+armor_type,
+hitpoints_random,
+saving_throws,
+skills,
+resistance,
+dmg_immunities,
+condition_immunities,
+senses,languages,
+challenge,
+exp,
+description,
+attacks,
+legendary,
+speciality

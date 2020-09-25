@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EncounterManagerController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#resetEncounterManager" text="Reset EncounterManager" />
+              <MenuItem mnemonicParsing="false" onAction="#importXML" text="Import Compendium XML" />
+              <MenuItem mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit" visible="false">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu id="menuImport" mnemonicParsing="false" text="DataBase" visible="false">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Save New Monster" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label id="LabelStatus" fx:id="labelStatus" alignment="CENTER_RIGHT" text="Status">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <ScrollPane id="scrollpaneEncounter" hbarPolicy="NEVER" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox fx:id="vBoxEncounter" prefWidth="508.0" />
+         </content>
+      </ScrollPane>
+   </center>
+   <left>
+      <TabPane fx:id="mainTabPane" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="monsterDB" text="MonsterDB">
+               <content>
+                  <BorderPane>
+                     <top>
+                        <HBox prefHeight="28.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="labelMonsterTableFilter" prefHeight="27.0" prefWidth="35.0" />
+                              <TextField fx:id="textFieldMonsterTableFilter" onKeyReleased="#filterMonsterData" prefHeight="25.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </top>
+                     <center>
+                        <TableView fx:id="tableMonster" onMouseClicked="#tabelsTabMouseEvent" prefHeight="474.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="pkMonsterCol" editable="false" prefWidth="75.0" text="pk_Monster" visible="false" />
+                            <TableColumn fx:id="monsterNameCol" editable="false" prefWidth="183.0" text="Name" />
+                              <TableColumn fx:id="monsterTypeCol" editable="false" minWidth="0.0" prefWidth="165.0" text="Type" />
+                              <TableColumn fx:id="monsterChallengeCol" editable="false" minWidth="0.0" prefWidth="51.0" text="CR" />
+                          </columns>
+                        </TableView>
+                     </center>
+                  </BorderPane>
+               </content>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </Tab>
+            <Tab text="CharacterDB">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <HBox prefHeight="29.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="labelCharacterTableFilter" prefHeight="23.0" prefWidth="35.0" />
+                              <TextField fx:id="textFieldCharacterTableFilter" onKeyReleased="#filterPlayerData" prefHeight="25.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </top>
+                     <center>
+                        <TableView fx:id="tableCharacter" onMouseClicked="#tabelsTabMouseEvent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                              <TableColumn fx:id="pkCharacterCol" editable="false" prefWidth="75.0" text="pk_character" visible="false" />
+                            <TableColumn fx:id="characterNameCol" editable="false" prefWidth="75.0" text="Name" />
+                            <TableColumn fx:id="characterRaceCol" editable="false" prefWidth="75.0" text="Race" />
+                              <TableColumn fx:id="characterClassCol" editable="false" prefWidth="75.0" text="Class" />
+                              <TableColumn fx:id="characterPCCol" editable="false" prefWidth="75.0" text="PC" />
+                              <TableColumn fx:id="characterLVLCol" prefWidth="75.0" text="LVL" />
+                          </columns>
+                        </TableView>
+                     </center>
+                  </BorderPane>
+               </content>
+            </Tab>
+            <Tab fx:id="monsterDetail" text="MDetail">
+               <content>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <TabPane fx:id="monsterTabPane" prefHeight="689.0" prefWidth="396.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab fx:id="tabMonsterGeneralStats" text="General Stats">
+                                 <content>
+                                    <AnchorPane prefHeight="669.0" prefWidth="396.0">
+                                       <children>
+                                          <Label fx:id="lblMonsterName" layoutX="14.0" layoutY="14.0" text="Label">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblMonsterType" layoutX="16.0" layoutY="49.0" text="Label" />
+                                          <Label fx:id="lblMonsterArmorClass" layoutX="16.0" layoutY="88.0" text="Label" />
+                                          <Label fx:id="lblMonsterChallenge" layoutX="17.0" layoutY="346.0" prefHeight="17.0" prefWidth="348.0" text="Label" />
+                                          <Label fx:id="lblMonsterHitpoints" layoutX="16.0" layoutY="105.0" text="Label" />
+                                          <Label fx:id="lblMonsterStr" layoutX="77.0" layoutY="166.0" text="Label" />
+                                          <Label fx:id="lblMonsterDex" layoutX="119.0" layoutY="166.0" text="Label" />
+                                          <Label fx:id="lblMonsterCon" layoutX="157.0" layoutY="166.0" text="Label" />
+                                          <Label fx:id="lblMonsterInt" layoutX="198.0" layoutY="166.0" text="Label" />
+                                          <Label fx:id="lblMonsterWis" layoutX="235.0" layoutY="166.0" text="Label" />
+                                          <Label fx:id="lblMonsterCha" layoutX="272.0" layoutY="166.0" text="Label" />
+                                          <Line endX="200.0" layoutX="163.0" layoutY="151.0" startX="-150.0" />
+                                          <Line endX="200.0" layoutX="163.0" layoutY="220.0" startX="-150.0" />
+                                          <Line endX="200.0" layoutX="168.0" layoutY="79.0" startX="-150.0" />
+                                          <Label fx:id="lblMonsterMovement" layoutX="16.0" layoutY="122.0" text="Label" />
+                                          <Label fx:id="lblMonsterSkills" layoutX="16.0" layoutY="250.0" prefHeight="17.0" prefWidth="349.0" text="Label" />
+                                          <Label fx:id="lblMonsterSenses" layoutX="17.0" layoutY="312.0" prefHeight="17.0" prefWidth="350.0" text="Label" />
+                                          <Label fx:id="lblMonsterLanguages" layoutX="17.0" layoutY="329.0" prefHeight="17.0" prefWidth="350.0" text="Label" />
+                                          <Line endX="200.0" layoutX="164.0" layoutY="372.0" startX="-150.0" />
+                                          <Label fx:id="lblMonsterSavingThrows" layoutX="16.0" layoutY="233.0" text="Label" />
+                                          <Label fx:id="lblMonsterConditionImmunities" layoutX="17.0" layoutY="295.0" text="Label" />
+                                          <Label fx:id="lblMonsterResistance" layoutX="16.0" layoutY="267.0" text="Label" />
+                                          <Label fx:id="lblMonsterDmgImmunities" layoutX="16.0" layoutY="280.0" text="Label" />
+                                          <Accordion layoutX="15.0" layoutY="379.0" prefHeight="250.0" prefWidth="313.0">
+                                            <panes>
+                                              <TitledPane fx:id="titledPaneMonsterActions" animated="false" prefHeight="268.0" prefWidth="313.0" text="Actions">
+                                                   <content>
+                                                      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                                         <content>
+                                                            <TextArea fx:id="textAreaMonsterActions" prefHeight="149.0" prefWidth="310.0" wrapText="true" />
+                                                         </content>
+                                                      </ScrollPane>
+                                                   </content>
+                                                </TitledPane>
+                                              <TitledPane animated="false" text="Description">
+                                                   <content>
+                                                      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                                         <content>
+                                                            <TextArea fx:id="textAreaMonsterDescription" prefHeight="130.0" prefWidth="309.0" wrapText="true" />
+                                                         </content>
+                                                      </ScrollPane>
+                                                   </content>
+                                                </TitledPane>
+                                                <TitledPane prefHeight="5.0" prefWidth="313.0" text="Traits">
+                                                   <content>
+                                                      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                                         <content>
+                                                            <TextArea fx:id="textAreaMonsterTraits" prefHeight="123.0" prefWidth="311.0" wrapText="true" />
+                                                         </content>
+                                                      </ScrollPane>
+                                                   </content>
+                                                </TitledPane>
+                                                <TitledPane prefHeight="200.0" prefWidth="200.0" text="Legendary Actions">
+                                                   <content>
+                                                      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                                         <content>
+                                                            <TextArea fx:id="textAreaMonsterLegendary" prefHeight="150.0" prefWidth="310.0" wrapText="true" />
+                                                         </content>
+                                                      </ScrollPane>
+                                                   </content>
+                                                </TitledPane>
+                                            </panes>
+                                          </Accordion>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="tabMonsterCombatStats" text="Combat Stats">
+                                 <content>
+                                    <ScrollPane prefHeight="466.0" prefWidth="396.0">
+                                       <content>
+                                          <AnchorPane prefHeight="454.0" prefWidth="390.0">
+                                             <children>
+                                                <Label fx:id="lblDeathSavingThrows1" alignment="TOP_LEFT" layoutX="218.0" layoutY="14.0" prefHeight="40.0" prefWidth="156.0" text="Label" visible="false">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="57.0" layoutY="221.0" text="Spellslots" />
+                                                <Label fx:id="lblMonsterNameCombat" layoutX="14.0" layoutY="14.0" text="Label">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="comboBoxConditions" layoutX="125.0" layoutY="111.0" prefWidth="150.0" promptText="Conditions" />
+                                                <ListView fx:id="listViewMonsterConditions" layoutX="127.0" layoutY="145.0" prefHeight="153.0" prefWidth="147.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </ScrollPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+            <Tab fx:id="characterDetail" text="CharDetail">
+               <content>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="General Stats">
+                           <content>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <AnchorPane prefHeight="467.0" prefWidth="399.0">
+                                       <children>
+                                          <Label fx:id="lblCharacterName" layoutX="14.0" layoutY="14.0" text="Label">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font></Label>
+                                          <Label fx:id="lblCharClass" layoutX="14.0" layoutY="49.0" text="Label" />
+                                          <Label fx:id="lblCharRace" layoutX="14.0" layoutY="66.0" text="Label" />
+                                          <Label fx:id="lblCharAllignment" layoutX="210.0" layoutY="66.0" text="Label" />
+                                          <Label fx:id="lblCharAC" layoutX="14.0" layoutY="83.0" text="Label" />
+                                          <Label fx:id="lblCharMovement" layoutX="14.0" layoutY="100.0" text="Label" />
+                                          <Label fx:id="lblCharStr" layoutX="70.0" layoutY="194.0" text="Label" />
+                                          <Label fx:id="lblCharDex" layoutX="112.0" layoutY="194.0" text="Label" />
+                                          <Label fx:id="lblCharCon" layoutX="151.0" layoutY="194.0" text="Label" />
+                                          <Label fx:id="lblCharInt" layoutX="196.0" layoutY="194.0" text="Label" />
+                                          <Label fx:id="lblCharWis" layoutX="235.0" layoutY="194.0" text="Label" />
+                                          <Label fx:id="lblCharCha" layoutX="276.0" layoutY="194.0" text="Label" />
+                                          <Line endX="200.0" layoutX="174.0" layoutY="151.0" startX="-150.0" />
+                                          <Line endX="200.0" layoutX="174.0" layoutY="265.0" startX="-150.0" />
+                                          <Label fx:id="lblCharLanguages" layoutX="14.0" layoutY="297.0" text="Label" />
+                                          <Label fx:id="lblCharSenses" layoutX="14.0" layoutY="274.0" text="Label" />
+                                          <Label layoutX="14.0" layoutY="321.0" text="Label" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                           </content>
+                        </Tab>
+                      <Tab text="Combat Stats" />
+                    </tabs>
+                  </TabPane>
+               </content>
+            </Tab>
+          <Tab text="Dice">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <AnchorPane prefHeight="27.0" prefWidth="400.0">
+                           <children>
+                              <TextField fx:id="textFieldDiceInput" editable="false" prefHeight="25.0" prefWidth="358.0" />
+                              <Button fx:id="buttonDiceClear" layoutX="358.0" layoutY="1.0" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="11.0" prefWidth="36.0" />
+                           </children>
+                        </AnchorPane>
+                        <TextField fx:id="textFieldDiceResult" editable="false" />
+                        <GridPane prefHeight="264.0" prefWidth="424.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="buttonDiceD100" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="53.0" prefWidth="134.0" text="d100" GridPane.rowIndex="1" />
+                              <Button fx:id="buttonDiceD20" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="35.0" prefWidth="149.0" text="d20" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="buttonDiceD10" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="45.0" prefWidth="154.0" text="d10" GridPane.rowIndex="2" />
+                              <Button fx:id="buttonDiceD8" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="39.0" prefWidth="152.0" text="d8" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Button fx:id="buttonDice7" mnemonicParsing="false" onAction="#diceBtnClicked" text="7" GridPane.rowIndex="4" />
+                              <Button fx:id="buttonDice8" mnemonicParsing="false" onAction="#diceBtnClicked" text="8" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Button fx:id="buttonDice4" mnemonicParsing="false" onAction="#diceBtnClicked" text="4" GridPane.rowIndex="5" />
+                              <Button fx:id="buttonDice5" mnemonicParsing="false" onAction="#diceBtnClicked" text="5" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Button fx:id="buttonDiceD12" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="43.0" prefWidth="156.0" text="d12" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Button fx:id="buttonDiceD4" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="46.0" prefWidth="160.0" text="d4" GridPane.rowIndex="3" />
+                              <Button fx:id="buttonDice9" mnemonicParsing="false" onAction="#diceBtnClicked" text="9" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Button fx:id="buttonDice6" mnemonicParsing="false" onAction="#diceBtnClicked" text="6" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <Button fx:id="buttonDice1" mnemonicParsing="false" onAction="#diceBtnClicked" text="1" GridPane.rowIndex="6" />
+                              <Button fx:id="buttonDice2" mnemonicParsing="false" onAction="#diceBtnClicked" text="2" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Button fx:id="buttonDice3" mnemonicParsing="false" onAction="#diceBtnClicked" text="3" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <Button fx:id="buttonDicePlus" mnemonicParsing="false" onAction="#diceBtnClicked" text="+" GridPane.rowIndex="7" />
+                              <Button fx:id="buttonDice0" mnemonicParsing="false" onAction="#diceBtnClicked" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Button fx:id="buttonDiceMinus" mnemonicParsing="false" onAction="#diceBtnClicked" text="-" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                              <Button fx:id="buttonDiceRoll" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="47.0" prefWidth="157.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Button fx:id="buttonDiceClearAll" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="37.0" prefWidth="140.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <Button fx:id="buttonDiceD6" mnemonicParsing="false" onAction="#diceBtnClicked" prefHeight="39.0" prefWidth="140.0" text="d6" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="497.0" prefWidth="200.0" BorderPane.alignment="BOTTOM_CENTER">
+         <children>
+            <Button layoutX="42.0" layoutY="416.0" mnemonicParsing="false" onAction="#sortCombatants" prefHeight="25.0" prefWidth="100.0" text="Sort Initiative" />
+            <Button layoutX="41.0" layoutY="339.0" mnemonicParsing="false" onAction="#deSelectAll" prefHeight="25.0" prefWidth="100.0" text="Deselect All" />
+            <Button fx:id="buttonTurn" layoutX="42.0" layoutY="467.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#turn" prefHeight="50.0" prefWidth="100.0" />
+            <Button layoutX="42.0" layoutY="377.0" mnemonicParsing="false" onAction="#removeCombatants" prefHeight="25.0" prefWidth="100.0" text="Remove" />
+            <TextField fx:id="textFieldDmg" layoutX="42.0" layoutY="216.0" prefHeight="25.0" prefWidth="100.0" />
+            <Button layoutX="7.0" layoutY="253.0" mnemonicParsing="false" onAction="#damageCombatant" prefHeight="25.0" prefWidth="70.0" text="Damage" />
+            <Label fx:id="lblDeathSavingThrows" alignment="TOP_LEFT" layoutX="13.0" layoutY="14.0" prefHeight="40.0" prefWidth="156.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="buttonDeathSavingThrowSuccess" layoutX="29.0" layoutY="74.0" mnemonicParsing="false" onAction="#deathSavingThrowSuccess" text="Success" />
+            <Button fx:id="buttonDeathSavingThrowFail" layoutX="96.0" layoutY="74.0" mnemonicParsing="false" onAction="#deathSavingThrowFail" prefHeight="25.0" prefWidth="63.0" text="Fail" />
+            <Button layoutX="42.0" layoutY="302.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="100.0" text="Select All" />
+            <Button layoutX="107.0" layoutY="253.0" mnemonicParsing="false" onAction="#healComabatant" prefHeight="25.0" prefWidth="70.0" text="Heal" />
+            <ToggleButton fx:id="toggleGeneralStats" layoutX="22.0" layoutY="163.0" mnemonicParsing="false" onAction="#toggleGeneralStats" prefHeight="25.0" prefWidth="70.0" text="General" />
+            <ToggleButton fx:id="toggleCombatStats" layoutX="92.0" layoutY="163.0" mnemonicParsing="false" onAction="#toggleCombatStats" prefHeight="25.0" prefWidth="70.0" text="Combat" />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
